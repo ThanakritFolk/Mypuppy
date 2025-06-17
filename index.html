@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday to my puppy ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Itim&family=Lilita+One&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Itim', sans-serif;
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+            url('images/bg.jpg') no-repeat center center fixed;
+      background-size: cover;      
+      overflow-x: hidden;
+      height: 100vh;
+    }
+
+    /* หน้า PIN Login */
+    #login {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      z-index: 10;
+    }
+
+    #login input[type="password"] {
+      font-size: 1.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      border: none;
+      margin-top: 1rem;
+      width: 200px;
+      text-align: center;
+    }
+
+    #login button {
+      margin-top: 1rem;
+      padding: 0.75rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 25px;
+      border: none;
+      background-color: #d48297;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #login button:hover {
+      background-color: #e04e5c;
+    }
+
+    #errorMsg {
+      margin-top: 1rem;
+      color: #ffffff;
+      height: 1.2rem;
+    }
+
+    /* เนื้อหาหลัก (ซ่อนตอนล็อกอินไม่ผ่าน) */
+    #mainContent {
+      display: none;
+    }
+
+    /* ส่วนที่เหลือของ CSS ของคุณ (เหมือนเดิม) */
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 100vh;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: rgb(246, 196, 196);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      max-width: 450px;
+      width: 100%;
+      animation: fadeIn 1.5s ease-in-out;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: #ff5e6c;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      font-family: 'Itim', sans-serif;
+      margin-top: 2rem;
+      padding: 10px 20px;
+      border: none;
+      background-color: #d48297;
+      color: white;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e04e5c;
+    }
+
+    #moreText {
+      display: none;
+      margin-top: 1rem;
+      color: #555;
+    }
+
+    .img {
+      margin-bottom: 1rem;
+      border-radius: 15px;
+      width: 100%;
+      height: auto;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      transform: rotate(45deg);
+      animation: floatUp 4s linear infinite;
+      z-index: 0;
+    }
+
+    .heart::before, .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1) rotate(45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) scale(1.5) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .card {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      p, button {
+        font-size: 1rem;
+      }
+    }
+  
+    #keypad button {
+  font-size: 1.2rem;
+  padding: 15px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ffffff88;
+  color: #ff4081;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#keypad button:hover {
+  background-color: #ffffffcc;
+}
+
+.dot {
+  width: 15px;
+  height: 15px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.2;
+  transition: opacity 0.2s;
+}
+.dot.filled {
+  opacity: 1;
+}
+  </style>
+</head>
+<body>
+
+<!-- หน้า Login PIN -->
+<div id="login">
+    <h2>กรุณาใส่ PIN เพื่อเข้าไปดูที่ไอโฟล์คทำไว้</h2>
+  
+    <!-- แสดงจุด PIN -->
+    <div id="pinDots" style="display: flex; gap: 10px; margin: 1rem 0;">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  
+    <!-- แป้นตัวเลข -->
+    <div id="keypad" style="display: grid; grid-template-columns: repeat(3, 60px); gap: 10px;">
+      <button onclick="pressKey('1')">1</button>
+      <button onclick="pressKey('2')">2</button>
+      <button onclick="pressKey('3')">3</button>
+      <button onclick="pressKey('4')">4</button>
+      <button onclick="pressKey('5')">5</button>
+      <button onclick="pressKey('6')">6</button>
+      <button onclick="pressKey('7')">7</button>
+      <button onclick="pressKey('8')">8</button>
+      <button onclick="pressKey('9')">9</button>
+      <button onclick="pressKey('del')">⌫</button>
+      <button onclick="pressKey('0')">0</button>
+      <button onclick="checkPin()">✔️</button>
+    </div>
+  
+    <div id="errorMsg"></div>
+  </div>
+
+<!-- เนื้อหาหลัก -->
+<div id="mainContent">
+  <audio id="bgm" loop>
+  <source src="song/song1.mp3" type="audio/mpeg">
+</audio>
+
+  <canvas id="stars"></canvas>
+
+  <div class="container">
+    <div class="card">
+      <!-- 🖼 แกลเลอรีหลายรูป -->
+      <div
+        class="gallery"
+        style="
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          gap: 10px;
+          max-width: 500px;
+          width: 100%;
+          margin-bottom: 2rem;
+        "
+      >
+        <img src="images/photo1.jpg" alt="รูปแฟน" style="width: 100%; border-radius: 15px;" />
+        <img src="images/photo2.jpg" alt="รูปแฟน" style="width: 100%; border-radius: 15px;" />
+        <img src="images/photo5.jpg" alt="รูปแฟน" style="width: 100%; border-radius: 15px;" />
+        <img src="images/photo4.jpg" alt="รูปแฟน" style="width: 100%; border-radius: 15px;" />
+        <img src="images/photo3.jpg" alt="รูปแฟน" style="width: 100%; border-radius: 15px;" />
+        <img src="images/photo6.jpg" alt="รูปแฟน" style="width: 100%; border-radius: 15px;" />
+        <img src="images/photo7.jpg" alt="รูปแฟน" style="width: 100%; border-radius: 15px;" />
+        <img src="images/photo8.jpg" alt="รูปแฟน" style="width: 100%; border-radius: 15px;" />
+        <img src="images/photo9.jpg" alt="รูปแฟน" style="width: 100%; border-radius: 15px;" />
+      </div>
+      <h1>Happy Birthday to my puppy 🎂🎉</h1>
+      <p>Wish u all the best I love u pew pew 💕</p>
+      <button onclick="showMessage()">Click click ❤️</button>
+      <p id="moreText">
+        happy birtday ไอหมาน้อยใช้ชีวิตให้มีความสุขมากๆนะคะ<br />
+        ไว้ไปเที่ยวด้วยกันเยอะๆเลยนะคะ💕
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ฟังก์ชันเช็ค PIN
+  function checkPin() {
+    const pin = document.getElementById("pinInput").value;
+    const errorMsg = document.getElementById("errorMsg");
+    const correctPin = "180647"; // กำหนด PIN ถูกต้องที่นี่
+
+    if (pin === correctPin) {
+      // ซ่อนหน้า login และแสดงเนื้อหาเว็บ
+      document.getElementById("login").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    } else {
+      errorMsg.textContent = "ไอ้หมานี่จำวันเกิดตัวเองไม่ได้หรอ";
+    }
+  }
+
+  function showMessage() {
+    document.getElementById("moreText").style.display = "block";
+    event.target.style.display = "none";
+  }
+
+  // 🌠 ดาวตก
+  const canvas = document.getElementById("stars");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let stars = [];
+
+  function createStar() {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: 0,
+      length: Math.random() * 100 + 50,
+      speed: Math.random() * 6 + 4,
+      alpha: 1,
+    });
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach((star, index) => {
+      ctx.strokeStyle = `rgba(255,255,255,${star.alpha})`;
+      ctx.beginPath();
+      ctx.moveTo(star.x, star.y);
+      ctx.lineTo(star.x - star.length, star.y + star.length);
+      ctx.stroke();
+
+      star.x -= star.speed;
+      star.y += star.speed;
+      star.alpha -= 0.01;
+
+      if (star.alpha <= 0) {
+        stars.splice(index, 1);
+      }
+    });
+  }
+
+  setInterval(() => {
+    createStar();
+  }, 500);
+
+  function animateStars() {
+    drawStars();
+    requestAnimationFrame(animateStars);
+  }
+  animateStars();
+
+  // 💖 หัวใจลอยขึ้น
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+  }
+  setInterval(createHeart, 300);
+</script>
+<script>
+    let pinValue = "";
+  
+    function pressKey(key) {
+      const dots = document.querySelectorAll("#pinDots .dot");
+  
+      if (key === "del") {
+        pinValue = pinValue.slice(0, -1);
+      } else if (pinValue.length < 6 && !isNaN(key)) {
+        pinValue += key;
+      }
+  
+      // แสดงจุดตามจำนวน pin
+      dots.forEach((dot, index) => {
+        if (index < pinValue.length) {
+          dot.classList.add("filled");
+        } else {
+          dot.classList.remove("filled");
+        }
+      });
+  
+      // ล้าง error msg
+      document.getElementById("errorMsg").textContent = "";
+    }
+  
+    function checkPin() {
+      const correctPin = "180647";
+      if (pinValue === correctPin) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("mainContent").style.display = "block";
+      } else {
+        document.getElementById("errorMsg").textContent = "ไอ้หมานี่จำวันเกิดตัวเองไม่ได้หรอ";
+        pinValue = "";
+        pressKey(""); // reset dots
+      }
+    }
+  </script>
+  
+  <script>
+  document.addEventListener('click', () => {
+    const audio = document.getElementById('bgm');
+    if (audio.paused) {
+      audio.play();
+    }
+  }, { once: true });
+</script>
+
+</body>
+</html>
